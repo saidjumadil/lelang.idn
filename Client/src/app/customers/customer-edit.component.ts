@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { DataService } from '../core/data.service';
-import { ICustomer, IState } from '../shared/interfaces';
+import { ICustomer } from '../shared/interfaces';
 
 @Component({
   selector: 'customer-edit',
@@ -11,15 +11,14 @@ import { ICustomer, IState } from '../shared/interfaces';
 export class CustomerEditComponent implements OnInit {
 
   customer: ICustomer = {
-    firstName: '',
-    lastName: '',
-    gender: '',
-    address: '',
-    email: '',
-    city: '',
-    zip: 0
+    judul: '',
+    jenisBarang: '',
+    deskripsi: '',
+    idPemilik: 0,
+    bukaLelang: '',
+    tutupLelang: ''
   };
-  states: IState[] = [];
+  
   errorMessage = '';
   deleteMessageEnabled = false;
   operationText = 'Insert';
@@ -35,7 +34,6 @@ export class CustomerEditComponent implements OnInit {
       this.getCustomer(id);
     }
 
-    this.getStates();
   }
 
   getCustomer(id: string) {
@@ -46,13 +44,10 @@ export class CustomerEditComponent implements OnInit {
         (err: any) => console.log(err));
   }
 
-  getStates() {
-    this.dataService.getStates().subscribe((states: IState[]) => this.states = states);
-  }
   
   submit() {
 
-      if (this.customer.id) {
+      if (this.customer.idBarang) {
 
         this.dataService.updateCustomer(this.customer)
           .subscribe((customer: ICustomer) => {
@@ -87,7 +82,7 @@ export class CustomerEditComponent implements OnInit {
 
   delete(event: Event) {
     event.preventDefault();
-    this.dataService.deleteCustomer(this.customer.id as string)
+    this.dataService.deleteCustomer(this.customer.idBarang?.toString() as string)
         .subscribe((status: boolean) => {
           if (status) {
             this.router.navigate(['/customers']);

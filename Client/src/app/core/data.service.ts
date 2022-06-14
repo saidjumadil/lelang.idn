@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError,  } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-import { ICustomer, IState, IPagedResults, ICustomerResponse } from '../shared/interfaces';
+import { ICustomer, IPagedResults, ICustomerResponse } from '../shared/interfaces';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -21,7 +21,7 @@ export class DataService {
         return this.http.get<ICustomer[]>(this.baseCustomersUrl)
             .pipe(
                    map(customers => {
-                       this.calculateCustomersOrderTotal(customers);
+                    //    this.calculateCustomersOrderTotal(customers);
                        return customers;
                    }),
                    catchError(this.handleError)
@@ -36,7 +36,7 @@ export class DataService {
                     const xInlineCount = res.headers.get('X-InlineCount');
                     const totalRecords = Number(xInlineCount);
                     let customers = res.body as ICustomer[];
-                    this.calculateCustomersOrderTotal(customers);
+                    // this.calculateCustomersOrderTotal(customers);
                     return {
                         results: customers,
                         totalRecords: totalRecords
@@ -59,13 +59,12 @@ export class DataService {
                 map((data) => {
                        console.log('insertCustomer status: ' + data.status);
                        return data.customer;
-                   }),
-                catchError(this.handleError)
+                   })
             );
     }
    
     updateCustomer(customer: ICustomer) : Observable<ICustomer> {
-        return this.http.put<ICustomerResponse>(this.baseCustomersUrl + '/' + customer.id, customer) 
+        return this.http.put<ICustomerResponse>(this.baseCustomersUrl + '/' + customer.idBarang, customer) 
             .pipe(
                 map((data) => {
                        console.log('updateCustomer status: ' + data.status);
@@ -82,25 +81,7 @@ export class DataService {
             );
     }
    
-    getStates(): Observable<IState[]> {
-        return this.http.get<IState[]>(this.baseStatesUrl)
-            .pipe(
-                catchError(this.handleError)
-            )
 
-    }
-
-    calculateCustomersOrderTotal(customers: ICustomer[]) {
-        for (let customer of customers) {
-            if (customer && customer.orders) {
-                let total = 0;
-                for (let order of customer.orders) {
-                    total += (order.price * order.quantity);
-                }
-                customer.orderTotal = total;
-            }
-        }
-    }
     
     private handleError(error: HttpErrorResponse) {
         console.error('server error:', error); 

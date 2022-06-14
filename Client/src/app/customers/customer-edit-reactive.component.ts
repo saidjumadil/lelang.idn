@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { DataService } from '../core/data.service';
-import { ICustomer, IState } from '../shared/interfaces';
+import { ICustomer } from '../shared/interfaces';
 import { ValidationService } from '../shared/validation.service';
 
 @Component({
@@ -11,22 +11,19 @@ import { ValidationService } from '../shared/validation.service';
   templateUrl: './customer-edit-reactive.component.html'
 })
 export class CustomerEditReactiveComponent implements OnInit {
-
+  
   customerForm: FormGroup = {} as FormGroup;
   get f(): { [key: string]: AbstractControl } {
     return this.customerForm.controls;
   }
   customer: ICustomer = {
-    firstName: '',
-    lastName: '',
-    gender: '',
-    address: '',
-    email: '',
-    city: '',
-    stateId: 0,
-    zip: 0
+    judul: '',
+    jenisBarang: '',
+    deskripsi: '',
+    idPemilik: 0,
+    bukaLelang: '',
+    tutupLelang: ''
   };
-  states: IState[] = [];
   errorMessage = '';
   deleteMessageEnabled: boolean = false;
   operationText: string = 'Insert';
@@ -34,16 +31,19 @@ export class CustomerEditReactiveComponent implements OnInit {
   constructor(private router: Router, 
               private route: ActivatedRoute, 
               private dataService: DataService,
-              private formBuilder: FormBuilder) { }
+              private formBuilder: FormBuilder) { 
 
+                console.log('masuk')
+              }
+
+  
   ngOnInit() {
-    let id = this.route.snapshot.params['id'];
+    let id : string = this.route.snapshot.params['id'];
     if (id !== '0') {
       this.operationText = 'Update';
       this.getCustomer(id);
+      
     }
-
-    this.getStates();
     this.buildForm();
   }
 
@@ -58,33 +58,29 @@ export class CustomerEditReactiveComponent implements OnInit {
 
   buildForm() {
       this.customerForm = this.formBuilder.group({
-        firstName:  [this.customer.firstName, Validators.required],
-        lastName:   [this.customer.lastName, Validators.required],
-        gender:     [this.customer.gender, Validators.required],
-        email:      [this.customer.email, [Validators.required, ValidationService.emailValidator]],
-        address:    [this.customer.address, Validators.required],
-        city:       [this.customer.city, Validators.required],
-        stateId:    [this.customer.stateId, Validators.required]
+        judul:  this.customer.judul,
+        jenisBarang:   this.customer.jenisBarang,
+        deskripsi:     this.customer.deskripsi,
+        idPemilik:    this.customer.idPemilik,
+        bukaLelang:       this.customer.bukaLelang,
+        tutupLelang:    this.customer.tutupLelang
+        
       });
   }
 
-  getStates() {
-    this.dataService.getStates().subscribe((states: IState[]) => this.states = states);
-  }
+
   
   submit({ value, valid }: { value: ICustomer, valid: boolean }) {
       
-      value.id = this.customer.id;
-      value.zip = this.customer.zip || 0; 
-      // var customer: ICustomer = {
-      //   id: this.customer.id,
-      // };
+      value.idBarang = this.customer.idBarang; 
 
-      if (value.id) {
+      if (value.idBarang) {
 
         this.dataService.updateCustomer(value)
           .subscribe((customer: ICustomer) => {
             if (customer) {
+              console.log("Berhasil Masuk")
+              console.log(value)
               this.router.navigate(['/customers']);
             }
             else {
@@ -98,13 +94,14 @@ export class CustomerEditReactiveComponent implements OnInit {
         this.dataService.insertCustomer(value)
           .subscribe((customer: ICustomer) => {
             if (customer) {
+              console.log(value)
               this.router.navigate(['/customers']);
             }
             else {
               this.errorMessage = 'Unable to add customer';
             }
           },
-          (err) => console.log(err));
+          (err) => this.router.navigate(['/customers']));
           
       }
   }
@@ -116,7 +113,7 @@ export class CustomerEditReactiveComponent implements OnInit {
 
   delete(event: Event) {
     event.preventDefault();
-    this.dataService.deleteCustomer(this.customer.id as string)
+    this.dataService.deleteCustomer(this.customer.idBarang?.toString() as string)
         .subscribe((status: boolean) => {
           if (status) {
             this.router.navigate(['/customers']);

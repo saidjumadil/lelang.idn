@@ -1,17 +1,6 @@
-# Angular ASP.NET Core Project
+## Lelang Idn - Aplikasi lelang barang secara online
 
-This project provides an example of getting started using 
-ASP.NET Core and Angular together in one project and is an updated version of the code shown in the [Integrating Angular with ASP.NET Core RESTful Services on Pluralsight](https://www.pluralsight.com/courses/angular-aspnetcore-restful-services). If you're coming from the Pluralsight course you'll find the Angular code for the project in the `Client` folder now.
-
-The project has the following goals:
-
-* Keep the Angular project code completely separate from the ASP.NET Core code to make updates of either technology easier in the future. This was a key consideration when organizing the folders/files in the project.
-
-* Provide a way to serve an Angular application using an MVC view (you can easily change this to serve from a Razor Page as well).
-
-* Allow standard MVC controllers/views to be used in situations where part of the application runs outside of Angular.
-
-* Support running the Angular project completely separate from the ASP.NET Core Web API if desired (CORS is enabled in the Startup.cs project). See the notes below if you want to use this option.
+Aplikasi ini adalah sarana dalam menjalankan kegiatan lelang barang secara online. Aplikasi ini menggunakan framework Angular sebagai front-end dan ASP.Net sebagai back-end. Pada saat ini masih dalam tahapan mendaftarkan barang untuk dilelang. 
 
 ## Running the Project
 
@@ -72,5 +61,3 @@ A few additional notes:
 * CORS is enabled in the `Startup.cs` file. You'll more than likely want to lock-down some of the settings for it though.
 * Cross-Site Request Forgery (XSRF) is turned on by default for the Web API POST/PUT/DELETE methods. You may want to remove the associated attribute from these methods since in a real-world scenario you'd likely implement token authentication
 in the API when ASP.NET Core is running as a separate/reuseable service.
-
-

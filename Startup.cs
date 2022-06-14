@@ -14,6 +14,7 @@ using Angular_ASPNETCore_CustomersService.Repository;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
+
 namespace Angular_ASPNETCore_CustomersService
 {
     public class Startup
@@ -78,14 +79,13 @@ namespace Angular_ASPNETCore_CustomersService
                            .WithExposedHeaders("X-InlineCount")));
 
             services.AddScoped<ICustomersRepository, CustomersRepository>();
-            services.AddScoped<IStatesRepository, StatesRepository>();
-            services.AddTransient<CustomersDbSeeder>();
+            // services.AddTransient<CustomersDbSeeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, 
             IWebHostEnvironment env, 
-            CustomersDbSeeder customersDbSeeder, 
+            // CustomersDbSeeder customersDbSeeder, 
             IAntiforgery antiforgery)
         {
             if (env.IsDevelopment())
@@ -131,6 +131,9 @@ namespace Angular_ASPNETCore_CustomersService
             // For 3.0
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -143,7 +146,7 @@ namespace Angular_ASPNETCore_CustomersService
                 endpoints.MapFallbackToController("Index", "Home");
             });
 
-            customersDbSeeder.SeedAsync(app.ApplicationServices).Wait();
+            // customersDbSeeder.SeedAsync(app.ApplicationServices).Wait();
         }
     }
 }

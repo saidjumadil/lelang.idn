@@ -20,51 +20,45 @@ namespace Angular_ASPNETCore_CustomersService.Repository
           _Logger = loggerFactory.CreateLogger("CustomersRepository");
         }
 
-        public async Task<List<Customer>> GetCustomersAsync()
+        public async Task<List<Barang>> GetCustomersAsync()
         {
-            return await _Context.Customers.OrderBy(c => c.LastName)
-                                 .Include(c => c.State).ToListAsync();
+            return await _Context.barang.OrderBy(c => c.idBarang).ToListAsync();
         }
 
-        public async Task<PagingResult<Customer>> GetCustomersPageAsync(int skip, int take)
+        public async Task<PagingResult<Barang>> GetCustomersPageAsync(int skip, int take)
         {
-            var totalRecords = await _Context.Customers.CountAsync();
-            var customers = await _Context.Customers
-                                 .OrderBy(c => c.LastName)
-                                 .Include(c => c.State)
-                                 .Include(c => c.Orders)
+            var totalRecords = await _Context.barang.CountAsync();
+            var customers = await _Context.barang
+                                 .OrderBy(c => c.idBarang)
                                  .Skip(skip)
                                  .Take(take)
                                  .ToListAsync();
-            return new PagingResult<Customer>(customers, totalRecords);
+            return new PagingResult<Barang>(customers, totalRecords);
         }
 
-        public async Task<Customer> GetCustomerAsync(int id)
+        public async Task<Barang> GetCustomerAsync(int id)
         {
-            return await _Context.Customers
-                                 .Include(c => c.State)
-                                 .SingleOrDefaultAsync(c => c.Id == id);
+            return await _Context.barang.SingleOrDefaultAsync(c => c.idBarang == id);
         }
 
-        public async Task<Customer> InsertCustomerAsync(Customer customer)
+        public async Task<Barang> InsertCustomerAsync(Barang customer)
         {
             _Context.Add(customer);
-            try
+             try
             {
               await _Context.SaveChangesAsync();
             }
-            catch (System.Exception exp)
+            catch (Exception exp)
             {
-               _Logger.LogError($"Error in {nameof(InsertCustomerAsync)}: " + exp.Message);
+               _Logger.LogError($"Error in {nameof(UpdateCustomerAsync)}: " + exp.Message);
             }
-
-            return customer;
+              return customer;
         }
 
-        public async Task<bool> UpdateCustomerAsync(Customer customer)
+        public async Task<bool> UpdateCustomerAsync(Barang customer)
         {
             //Will update all properties of the Customer
-            _Context.Customers.Attach(customer);
+            _Context.barang.Attach(customer);
             _Context.Entry(customer).State = EntityState.Modified;
             try
             {
@@ -82,9 +76,7 @@ namespace Angular_ASPNETCore_CustomersService.Repository
             //Extra hop to the database but keeps it nice and simple for this demo
             //Including orders since there's a foreign-key constraint and we need
             //to remove the orders in addition to the customer
-            var customer = await _Context.Customers
-                                .Include(c => c.Orders)
-                                .SingleOrDefaultAsync(c => c.Id == id);
+            var customer = await _Context.barang.SingleOrDefaultAsync(c => c.idBarang == id);
             _Context.Remove(customer);
             try
             {

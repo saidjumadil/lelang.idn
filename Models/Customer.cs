@@ -1,19 +1,21 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace Angular_ASPNETCore_CustomersService.Models {
-  public class Customer
+  
+  public class Barang
   {
-    public int Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
-    public string Address { get; set; }
-    public string City { get; set; }
-    public State State { get; set; }
-    public int StateId { get; set; }
-    public int Zip { get; set; }
-    public string Gender { get; set; }
-    public int OrderCount { get; set; }
-    public ICollection<Order> Orders { get; set; }
+    [Key]
+    public int idBarang { get; set; }
+    public string judul { get; set; }
+    public string jenisBarang { get; set; }
+    public string deskripsi { get; set; }
+    public int idPemilik { get; set; }
+    public string bukaLelang { get; set; }
+    public string tutupLelang { get; set; }
+    public string hargaAwal { get; set; }
+    public string kelipatan { get; set; }
   }
+
 }

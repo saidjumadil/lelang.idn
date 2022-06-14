@@ -23,7 +23,7 @@ namespace Angular_ASPNETCore_CustomersService.Apis
         // GET api/customers
         [HttpGet]
         [NoCache]
-        [ProducesResponseType(typeof(List<Customer>), 200)]
+        [ProducesResponseType(typeof(List<Barang>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         public async Task<ActionResult> Customers()
         {
@@ -42,7 +42,7 @@ namespace Angular_ASPNETCore_CustomersService.Apis
         // GET api/customers/page/10/10
         [HttpGet("page/{skip}/{take}")]
         [NoCache]
-        [ProducesResponseType(typeof(List<Customer>), 200)]
+        [ProducesResponseType(typeof(List<Barang>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         public async Task<ActionResult> CustomersPage(int skip, int take)
         {
@@ -62,7 +62,7 @@ namespace Angular_ASPNETCore_CustomersService.Apis
         // GET api/customers/5
         [HttpGet("{id}", Name = "GetCustomerRoute")]
         [NoCache]
-        [ProducesResponseType(typeof(Customer), 200)]
+        [ProducesResponseType(typeof(Barang), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         public async Task<ActionResult> Customers(int id)
         {
@@ -83,12 +83,8 @@ namespace Angular_ASPNETCore_CustomersService.Apis
         // [ValidateAntiForgeryToken]
         [ProducesResponseType(typeof(ApiResponse), 201)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public async Task<ActionResult> CreateCustomer([FromBody]Customer customer)
+        public async Task<ActionResult> CreateCustomer([FromBody]Barang customer)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new ApiResponse { Status = false, ModelState = ModelState });
-            }
 
             try
             {
@@ -97,7 +93,7 @@ namespace Angular_ASPNETCore_CustomersService.Apis
                 {
                     return BadRequest(new ApiResponse { Status = false });
                 }
-                return CreatedAtRoute("GetCustomerRoute", new { id = newCustomer.Id },
+                return CreatedAtRoute("GetCustomerRoute", new { idBarang = newCustomer.idBarang },
                         new ApiResponse { Status = true, Customer = newCustomer });
             }
             catch (Exception exp)
@@ -112,12 +108,8 @@ namespace Angular_ASPNETCore_CustomersService.Apis
         // [ValidateAntiForgeryToken]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public async Task<ActionResult> UpdateCustomer(int id, [FromBody]Customer customer)
+        public async Task<ActionResult> UpdateCustomer(int id, [FromBody]Barang customer)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new ApiResponse { Status = false, ModelState = ModelState });
-            }
 
             try
             {

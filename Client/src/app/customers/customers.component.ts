@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { DataFilterService } from '../core/data-filter.service';
 import { DataService } from '../core/data.service';
-import { ICustomer, IOrder, IPagedResults } from '../shared/interfaces';
+import { ICustomer, IPagedResults } from '../shared/interfaces';
 
 @Component({ 
   selector: 'customers', 
@@ -16,14 +16,14 @@ export class CustomersComponent implements OnInit {
   filteredCustomers: ICustomer[] = [];
 
   totalRecords: number = 0;
-  pageSize: number = 10;
+  pageSize: number = 1000;
 
   constructor(private router: Router, 
               private dataService: DataService,
               private dataFilter: DataFilterService) { }
   
   ngOnInit() {
-    this.title = 'Customers';
+    this.title = 'Barang Lelang';
     this.getCustomersPage(1);
   }
 

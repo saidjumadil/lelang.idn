@@ -15,10 +15,28 @@ import { TrackByService } from '../core/trackby.service';
 export class CustomersGridComponent implements OnInit {
 
   @Input() customers: ICustomer[] = [];
+  
+  constructor(private sorter: Sorter, public trackby: TrackByService) { 
+  }
 
-  constructor(private sorter: Sorter, public trackby: TrackByService) { }
-   
   ngOnInit() {
+  }
+
+  getStatus(mulaiLelang : string, tutupLelang : string){
+    let currentDate = new Date()
+    const mulai = new Date(mulaiLelang)
+    const tutup = new Date(tutupLelang)
+    if(currentDate < mulai){
+      return 1
+    }
+    else if(currentDate > tutup){
+      return 2
+    }
+    else{
+      return 3
+    }
+
+    return false
 
   }
 
